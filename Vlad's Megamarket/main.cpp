@@ -11,6 +11,7 @@
 //Глобальные массивы
 int size = 10;
 int receiptSize = 1;
+double totalSum = 0;
 double cash = 75009.33;
 double nal = 0;
 double beznal = 0;
@@ -234,13 +235,14 @@ void Shop()
 void Selling()
 {
 	int chooseId, chooseCount, confirm, choice;
+	
 	bool isFirst = true;
-	double totalSum = 0;
 	while (true)
 	{
 		totalSum = 0;
 		do
 		{
+			totalSum = 0;
 			std::cout << "Введите ID товара: ";
 			std::cin >> chooseId;
 			if (chooseId < 1 || chooseId > size)
@@ -283,13 +285,15 @@ void Selling()
 					countReceiptArr[receiptSize - 1] = chooseCount;
 					priceReceiptArr[receiptSize - 1] = priceArr[chooseId - 1] * chooseCount;
 					countArr[chooseId - 1] -= chooseCount;
-					totalSum += priceArr[chooseId - 1] * chooseCount;
+					
+					
 					isFirst = false;
 				}
 				else
 				{
 					AddElToReceipt(chooseId, chooseCount);
-					totalSum += priceArr[chooseId - 1] * chooseCount;
+					
+					
 				}
 			}
 			else
@@ -307,7 +311,7 @@ void Selling()
 			break;
 		} while (true);
 
-
+		
 
 
 		PrintReceipt();
@@ -391,11 +395,43 @@ void AddElToReceipt(int id, int count)
 
 void PrintReceipt()
 {
+	int totalCount = 0;
+	
+	bool card = false;
+	int cardChoice;
+	
+	do
+	{
+		std::cout << "Дисконтная карта? 1 - Да 2 - Нет: ";
+		std::cin >> cardChoice;
+	} while (cardChoice < 0 || cardChoice > 2);
+	if (cardChoice == 1)
+	{
+		card = true;
+	}
+	else if (cardChoice == 2)
+	{
+		card = false;
+	}
 	std::cout << "Название товара\t\t\t\tКол-во\t\tЦена\n";
 	for (int i = 0; i < receiptSize; i++)
 	{
 		std::cout << nameReceiptArr[i] << "\t\t\t" << countReceiptArr[i] << "\t\t" << priceReceiptArr[i] << "\n";
+		totalSum += priceReceiptArr[i] * countReceiptArr[i];
+		totalCount += countReceiptArr[i];
 	}
+	if (totalCount >= 5)
+	{
+		std::cout << "Скидка 10% за покупку 5 товаров и более\n";
+		totalSum *= 0.90;
+	}
+	if (card)
+	{
+		std::cout << "Скидка по карте 5%\n";
+		totalSum *= 0.95;
+		
+	}
+	std::cout << "Итого:\t\t\t\t\t\t\t" << totalSum;
 }
 
 void ChangePrice()
