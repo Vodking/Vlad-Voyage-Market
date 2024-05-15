@@ -48,6 +48,7 @@ void ChangeStorage();
 void AddElementToEnd();
 void RemoveElementOnIndex();
 void CashStatus();
+void CreateNewStorage();
 
 
 
@@ -122,7 +123,15 @@ void Start()
 			}
 			else if (chooseStorageType == 2)
 			{
-				std::cout << "Ин прогресс...\n";
+				do
+				{
+					CreateNewStorage();
+					ShowStorage();
+					std::cout << "Всё верно?\n1 - Да, 2 - Нет";
+					std::cin >> choice;
+				} while (choice != 1);
+				Shop();
+				
 			}
 			else
 			{
@@ -591,7 +600,7 @@ void RemoveElementOnIndex()
 	{
 		std::cout << "Введите ID товара для удаления: ";
 		std::cin >> index;
-	} while (index < 1 || index > size);
+	} while (index < 1 || index > size+1);
 
 	for (int i = 0, j = 0; i < size, j < size; i++, j++)
 	{
@@ -641,6 +650,32 @@ void CashStatus()
 		std::cout << "\t\t\t\t$$$ Big Money $$$\n";
 	}
 
+}
+
+void CreateNewStorage()
+{
+	DeleteMainArrays();
+	
+	std::cout << "Введите количество типов товаров на складе: ";
+	std::cin >> size;
+	int* idArr = new int[size];
+	std::string* nameArr = new std::string[size];
+	int* countArr = new int[size];
+	double* priceArr = new double[size];
+
+	for (int i = 0; i < size; i++)
+	{
+		std::cin.ignore(32000, '\n');
+		std::cout << "Введите название товара номер" << i + 1 << ": ";
+		std::getline(std::cin, nameArr[i]);
+		std::cout << "Введите количество " << nameArr[i] << ": ";
+		std::cin >> countArr[i];
+		std::cout << "Введите цену " << nameArr[i] << ": ";
+		std::cin >> priceArr[i];
+		idArr[i] = i;
+	}
+
+	
 }
 
 
